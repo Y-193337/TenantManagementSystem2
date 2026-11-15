@@ -1,4 +1,4 @@
-package com.example.tenantmanagementsystem2
+package com.example.tenantmanagementsystem2.ui.auth
 
 import android.content.Intent
 import android.net.Uri
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tenantmanagementsystem2.databinding.ActivityLoginBinding
+import com.example.tenantmanagementsystem2.ui.main.MainActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -36,7 +37,8 @@ class LoginActivity : AppCompatActivity() {
             }
 
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("LOGGED_IN_EMAIL", email)
+
+            intent.putExtra("EMAIL", email)
 
             startActivity(intent)
 

@@ -1,4 +1,4 @@
-package com.example.tenantmanagementsystem2
+package com.example.tenantmanagementsystem2.ui.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,8 +13,10 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.tenantmanagementsystem2.R
 import com.example.tenantmanagementsystem2.databinding.ActivityMainBinding
 import com.example.tenantmanagementsystem2.databinding.NavHeaderBinding
+import com.example.tenantmanagementsystem2.ui.auth.LoginActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,45 +32,38 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        // 1. Use our Toolbar as the App Bar
         setSupportActionBar(binding.toolbar)
 
-        // 2. Get the NavController from the NavHost
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
         navController = navHostFragment.navController
 
-        // 3. Top-level destinations + the drawer
         appBarConfiguration = AppBarConfiguration(
             setOf(R.id.dashboardFragment, R.id.addTenantFragment, R.id.viewTenantsFragment),
             binding.drawerLayout
         )
 
-        // 4. Connect the App Bar and the drawer to navigation
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         binding.navView.setupWithNavController(navController)
 
-        // 5. Show the user's email in the drawer header.
-        val email = intent.getStringExtra("EMAIL") ?: intent.getStringExtra("LOGGED_IN_EMAIL")
+        val email = intent.getStringExtra("EMAIL")
 
         val headerBinding = NavHeaderBinding.bind(binding.navView.getHeaderView(0))
+
         headerBinding.headerEmailTextView.text = email ?: "Signed in"
     }
 
-    // ☰ opens the drawer; ← goes back
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    // Turn main_menu.xml into menu items in the App Bar
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return true
     }
 
-    // What happens when a menu item is tapped
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         if (item.itemId == R.id.action_logout) {
@@ -85,7 +80,6 @@ class MainActivity : AppCompatActivity() {
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 
-    // ── LIFECYCLE LOGS ────────────────────────────────────────────
     override fun onStart() {
         super.onStart()
         Log.d("TENANT_LIFECYCLE", "MainActivity: onStart")

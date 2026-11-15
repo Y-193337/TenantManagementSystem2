@@ -1,17 +1,21 @@
-package com.example.tenantmanagementsystem2
+package com.example.tenantmanagementsystem2.ui.tenants
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.tenantmanagementsystem2.databinding.FragmentAddTenantBinding
+import com.example.tenantmanagementsystem2.ui.viewmodel.TenantViewModel
 
 class AddTenantFragment : Fragment() {
 
     private var _binding: FragmentAddTenantBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: TenantViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,31 +30,18 @@ class AddTenantFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.saveButton.setOnClickListener {
-            val name = binding.tenantNameEditText.text.toString().trim()
-            val phone = binding.phoneEditText.text.toString().trim()
-            val rent = binding.rentEditText.text.toString().trim()
+            val name = binding.tenantNameEditText.text.toString()
+            val phone = binding.phoneEditText.text.toString()
+            val rent = binding.rentEditText.text.toString()
 
-            var isValid = true
+            val tenant = viewModel.addTenant(name, phone, rent)
 
-            if (name.isEmpty()) {
-                binding.tenantNameEditText.error = "Required"
-                isValid = false
-            }
-            if (phone.isEmpty()) {
-                binding.phoneEditText.error = "Required"
-                isValid = false
-            }
-            if (rent.isEmpty()) {
-                binding.rentEditText.error = "Required"
-                isValid = false
-            }
-
-            if (!isValid) {
+            if (tenant == null) {
+                if (name.trim().isEmpty()) binding.tenantNameEditText.error = "Required"
+                if (phone.trim().isEmpty()) binding.phoneEditText.error = "Required"
+                if (rent.trim().isEmpty()) binding.rentEditText.error = "Required"
                 return@setOnClickListener
             }
-
-            val tenant = Tenant(name, phone, rent)
-            TenantRepository.addTenant(tenant)
 
             val action = AddTenantFragmentDirections.actionAddTenantFragmentToViewTenantsFragment(tenant)
             findNavController().navigate(action)

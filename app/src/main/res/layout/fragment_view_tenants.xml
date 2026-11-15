@@ -5,7 +5,7 @@
     <data>
         <variable
             name="tenant"
-            type="com.example.tenantmanagementsystem2.Tenant" />
+            type="com.example.tenantmanagementsystem2.data.model.Tenant" />
     </data>
 
     <ScrollView
